@@ -29,7 +29,7 @@ FILE=input("\nRuta del archivo SCORM: ")
 if os.path.isfile(FILE):
     MD5SUM = str(sh.md5sum(FILE))[:32]
     sh.ln("-s", FILE, MD5SUM+".zip")
-    FILE = MD5SUM+".zip"
+    TMPFILE = MD5SUM+".zip"
 else:
     sys.exit(0)
 
@@ -62,11 +62,11 @@ class GeogebraChef(SushiChef):
         logging.basicConfig(level=logging.INFO)
 
         with tempfile.TemporaryDirectory() as extract_path:
-            imscp_dict = extract_from_zip(os.path.join(script_dir, FILE), license,
+            imscp_dict = extract_from_zip(os.path.join(script_dir, TMPFILE), license,
                     extract_path)
             for topic_dict in imscp_dict['organizations']:
                 topic_tree = make_topic_tree_with_entrypoints(license,
-                        os.path.join(script_dir, FILE),
+                        os.path.join(script_dir, TMPFILE),
                         topic_dict, extract_path, tempfile.gettempdir())
                 print('Adding topic tree to channel:', topic_tree)
                 channel.add_child(topic_tree)
@@ -80,3 +80,5 @@ if __name__ == '__main__':
     """
     chef = GeogebraChef()
     chef.main()
+    if os.path.isfile(TMPFILE):
+        os.unlink(TMPFILE)
