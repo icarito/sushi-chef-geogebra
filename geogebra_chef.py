@@ -28,6 +28,8 @@ DESCRIPTION = input("\nIngrese la descripción: ")
 FILE=input("\nRuta del archivo SCORM: ")
 if os.path.isfile(FILE):
     MD5SUM = str(sh.md5sum(FILE))[:32]
+    sh.ln("-s", FILE, MD5SUM+".zip")
+    FILE = MD5SUM+".zip"
 else:
     sys.exit(0)
 
@@ -64,7 +66,7 @@ class GeogebraChef(SushiChef):
                     extract_path)
             for topic_dict in imscp_dict['organizations']:
                 topic_tree = make_topic_tree_with_entrypoints(license,
-                        os.path.join(script_dir, MD5SUM + ".zip"),
+                        os.path.join(script_dir, FILE),
                         topic_dict, extract_path, tempfile.gettempdir())
                 print('Adding topic tree to channel:', topic_tree)
                 channel.add_child(topic_tree)
