@@ -14,6 +14,7 @@ import os
 import sys
 import tempfile
 import getopt
+import sh
 
 from ricecooker.chefs import SushiChef
 from ricecooker.classes import licenses
@@ -22,7 +23,17 @@ from imscp.core import extract_from_zip
 from imscp.ricecooker_utils import make_topic_tree_with_entrypoints
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-argv = sys.argv[1:]
+TITLE = input("\nIngrese el título: ")
+DESCRIPTION = input("\nIngrese la descripción: ")
+FILE=input("\nRuta del archivo SCORM: ")
+if os.path.isfile(FILE):
+    MD5SUM = str(sh.md5sum(FILE))[:32]
+else:
+    sys.exit(0)
+
+print ("Procesando: " + TITLE)
+print ("            " + "="*len(TITLE))
+print ("            " + DESCRIPTION + "\n")
 
 class GeogebraChef(SushiChef):
     """
@@ -32,9 +43,9 @@ class GeogebraChef(SushiChef):
     """
     channel_info = {
         'CHANNEL_SOURCE_DOMAIN': "geogebra.org",
-        'CHANNEL_SOURCE_ID': "test geogebra SCORM upload",
-        'CHANNEL_TITLE': "Test SCORM",
-        'CHANNEL_DESCRIPTION': "Cilindro de pruebas",
+        'CHANNEL_SOURCE_ID': "Recursos Geogebra",
+        'CHANNEL_TITLE': TITLE,
+        'CHANNEL_DESCRIPTION': DESCRIPTION,
         'CHANNEL_LANGUAGE': "es",
     }
 
@@ -49,11 +60,11 @@ class GeogebraChef(SushiChef):
         logging.basicConfig(level=logging.INFO)
 
         with tempfile.TemporaryDirectory() as extract_path:
-            imscp_dict = extract_from_zip(os.path.join(script_dir, '2b49248a9f57d1541124639dbfee72a7.zip'), license,
+            imscp_dict = extract_from_zip(os.path.join(script_dir, FILE), license,
                     extract_path)
             for topic_dict in imscp_dict['organizations']:
                 topic_tree = make_topic_tree_with_entrypoints(license,
-                        os.path.join(script_dir, '2b49248a9f57d1541124639dbfee72a7.zip'),
+                        os.path.join(script_dir, MD5SUM + ".zip"),
                         topic_dict, extract_path, tempfile.gettempdir())
                 print('Adding topic tree to channel:', topic_tree)
                 channel.add_child(topic_tree)
