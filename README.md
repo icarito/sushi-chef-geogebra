@@ -3,7 +3,7 @@ Script para importar archivos SCORM de Geogebra
 
 (Sushi script for importing Geogebra SCORM files - english at bottom)
 
-## Instalación de prerequisitos ==
+## Instalación de prerequisitos
 
 Asumiendo que se tiene Python3 instalado y el gestor de paquetes de Python, pip (python3-pip en Debian y derivados).
 
