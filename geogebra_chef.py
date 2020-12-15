@@ -45,7 +45,7 @@ class GeogebraChef(SushiChef):
     """
     channel_info = {
         'CHANNEL_SOURCE_DOMAIN': "geogebra.org",
-        'CHANNEL_SOURCE_ID': "Recursos Geogebra",
+        'CHANNEL_SOURCE_ID': TITLE.lower().strip().replace(" ", "-"),
         'CHANNEL_TITLE': TITLE,
         'CHANNEL_DESCRIPTION': DESCRIPTION,
         'CHANNEL_LANGUAGE': "es",
